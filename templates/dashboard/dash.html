@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>hosstQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <style>
+
+.secret {
+  filter: blur(5px);
+   --bg-color: #5b606b;
+   --nb-color: #36393f;
+   -bg-colour: var(--bg-color);
+    --nb-colour: var(--nb-color);
+}
+
+
+.secret:hover {
+	filter: none;
+}
+
+
+:root {
+    --bg-color: #5b606b;
+    --nb-color: #36393f;
+
+    --bg-colour: var(--bg-color);
+    --nb-colour: var(--nb-color);
+}
+
+
+
+
+
+.card {
+    margin-top: 20px;
+    border-radius: 0;
+    background-color: var(--nb-colour);
+    height: fit-content !important;
+}
+
+.card > .card-title {
+    /* font-family: 'Noto Mono', sans-serif; */
+    margin: 0;
+    font-size: 27px;
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 10px;
+    color: rgb(140, 140, 140);
+}
+
+.card > .card-divider {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: solid 2px var(--bg-color);
+}
+
+p {
+    font-family: 'Noah', sans-serif;
+    color: rgb(180, 180, 180);
+    font-size: 5px;
+    text-align: center;
+}
+
+.card > .card-custom-content { 
+    padding-left: 20px;
+    /* font-family: 'Noah', sans-serif; */
+    text-align: left;
+    color: rgb(180, 180, 180);
+    font-size: 20px;
+}
+        nav {
+    margin: 0 auto;
+    margin-top: 16px !important;
+    background-color: var(--nb-colour);
+    width: 400px;
+    max-width: 95%;
+
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+.link {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+    float:left;
+    margin-right:5px;
+}
+p {
+    font-family: 'Noah', sans-serif;
+    color: rgb(180, 180, 180);
+    font-size: 16px;
+    text-align: left;
+}
+
+p.link {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+p.link > a > button {
+    color: rgb(180, 180, 180);
+    width: 150px !important;
+    height: 40px !important;
+    background-color: var(--bg-colour) !important;
+    border-radius: 5px;
+}
+
+p.link > a > button:hover {
+    color: rgb(140, 140, 140) !important;
+}
+        @media (min-width: 320px) and (max-width: 428px)
+{
+
+.floated {
+   	float:left;
+  	 margin-right:5px;
+}
+
+}
+
+
+    </style>
+    <center>
+        
+        <div id="main-content">
+            
+            
+            <h1 style="text-shadow:2px 2px 2px black"><b>
+                
+        
+                <div class="container">
+                    <div class="center" style="width: 400px; max-width: 100%;">                    
+                        <div class="card small", style="float: left;">
+                            <p class="card-title">Server Statistics</p>                                                         
+                            <div class="card-divider"></div>
+                                <div class="card-custom-content">
+                                    
+                                Stored Files: {{files}} <br>
+                                Used storage: {{size}}/50GB 
+                                
+                            <br>
+                            <br>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+
+                        <div class="card small", style="float:left">
+                            <p class="card-title">User info</p>
+                                    
+                                    <div class="card-divider"></div>
+                                        <div class="card-custom-content">
+                                        You are currently logged in as {{current_user.username}}
+                                        <br>
+                                        <br>
+                                        <br>
+                                       		Remember! Do not share this secret with ANYONE!
+                                       		<h2 class="secret"style="text-shadow:2px 2px  black">{{current_user.user_id}}</h2>
+
+        
+                                        </div>
+                                </div>
+                            </div>
+                            
+                        <div class="card small", style="float:left">
+                        <p class="card-title">Configuration Files</p>
+                                
+                                <div class="card-divider"></div>
+                                <div class="card-custom-content">
+                                    <p class="link" id="update-section" style="display: block;"><a href="/sxcu"><button>ShareX Configuration</button></a></p>
+                                    
+                                    <p class="link" id="update-section" style="display: block;"><a href="/sharenix" download><button>ShareNix Configuration</button></a></p>
+                                    
+                                    <p class="link f" id="update-section" style="display: block;"><a href="/source"><button>Source Code</button></a></p>
+                                    <br>
+                                    <a href="{{ url_for('logout') }}">Press here to logout of this account.</a>
+                                </div>
+                            </div>
+                        </div>
+
+                    
+                    </div>  
+                </div>   
+            </b></h1>
+        </div>
+        
+    </center>
+
+    
+
+
+
+</body>
+</html>
