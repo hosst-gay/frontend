@@ -196,9 +196,6 @@ def users(id):
 
 
 
-
-
-
 @app.route("/sxcu")
 @login_required
 def sxcu():
@@ -267,11 +264,12 @@ def embed(filename=None):
     url = request.root_url
     folder = os.path.join('./', storage_folder+f'/{filename}')
 
+
     if filename.endswith(tuple(extensions)):
-        return render_template("images/embed2.html", folder=storage_folder)
+        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename)
     else:
 
-        return render_template("images/embed.html", folder=folder, url=url)
+        return render_template("images/embed.html", folder=folder, url=url, filename=filename)
 
 
 @app.route('/login', methods=["GET", "POST"])
