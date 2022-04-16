@@ -15,7 +15,7 @@ import json
 from pathlib import Path
 
 
-from utils import size, uptime, userid
+from utils import size, uptime, userid, folder
 from utils.sxcu import sharex
 
 
@@ -316,6 +316,7 @@ def register():
                             password=hashed_password, user_id=str(user_id), ip=ip)
             db.session.add(new_user)
             db.session.commit()
+            folder.create_folder(username=form.username.data)
 
             return redirect(url_for('login'))
 
