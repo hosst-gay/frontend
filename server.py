@@ -32,7 +32,8 @@ bcrypt = Bcrypt(app)
 app.config["SECRET_KEY"] = "SawshaIsCute"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_BINDS'] = {
-    'embed':'sqlite:///embed.db'
+    'embed':'sqlite:///embed.db',
+    'image':'sqlite:///image.db'
 }
 app.config['SQLALCHEMY_ECHO'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -104,6 +105,13 @@ class Embed(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     color = db.Column(db.String(30), nullable=False)
+
+class image(db.Model):
+    __bind_key__ = 'image'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False, unique=True)
+    filename = db.Column(db.String(10), nullable=False)
+
 
 
 class RegisterForm(FlaskForm):
@@ -225,6 +233,10 @@ def share():
 def source():
     return redirect(location="https://github.com/SawshaDev/hosst")
 
+@app.route('/upload')
+@login_required
+def upload_file():
+    return render_template('upload/upload.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -246,8 +258,10 @@ def upload():
             return 'File size too large', 400
 
         filename = secrets.token_urlsafe(5)
-        file.save(os.path.join(storage_folder, filename + extension))
-        
+        file.save(os.path.join(storage_folder+current_user.username, filename + extension))
+        file_info = image(username=current_user.username,filename=filename+extension)
+        db.session.add(file_info)
+        db.session.commit()
         json.dumps({"filename": filename, "extension": extension}) 
 
         return redirect(f'/{filename+extension}')
@@ -316,7 +330,7 @@ def register():
                             password=hashed_password, user_id=str(user_id), ip=ip)
             db.session.add(new_user)
             db.session.commit()
-            folder.create_folder(username=form.username.data)
+            folder.create_folder.folder(username=form.username.data)
 
             return redirect(url_for('login'))
 
