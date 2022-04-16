@@ -1,5 +1,5 @@
 
-from flask import Flask, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for, flash
+from flask import Flask, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for
 from io import BytesIO
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
@@ -23,7 +23,7 @@ secret_key = 'SawshaIsCute'
 admin = ["sawsha"]
 allowed_extension = ['.png', '.jpeg', '.jpg', '.gif', '.webm', '.mp4']
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
-storage_folder = '/mnt/volume_nyc1_02/imgs'
+storage_folder = '/mnt/volume_nyc1_02/imgs/'
 
 
 app = Flask(__name__)
@@ -99,11 +99,7 @@ class User(db.Model, UserMixin):
     user_id = db.Column(db.String(50), nullable=False, unique=True)
     ip = db.Integer()
 
-class Embed(db.Model):
-    __bind_key__ = 'embed'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True)
-    color = db.Column(db.String(30), nullable=False)
+
 
 
 class RegisterForm(FlaskForm):
@@ -149,31 +145,10 @@ def dash():
 
     return render_template("dashboard/dash.html", uptime=uptime, files=number_files, size=folder_size)
 
-
 @app.route('/dashboard/embed')
 @login_required
 def embed_stuff():
-    return render_template('dashboard/embed.html')
-
-@app.route('/dashboard/embed', methods=['POST'])
-def embed_processing():
-    if request.method == 'POST':
-        req = request.form['image']
-        username = current_user.username
-        
-        if Embed.query.filter_by(username=username) is not None:
-            embed = Embed.query.filter_by(username=username).first()
-            embed.color = req
-            db.session.commit() 
-        else:
-            embed_stuff = Embed(color=req, username=username) #this just puts the data into the fucking colums n shit :)))) 
-            db.session.add(embed_stuff)
-            db.session.commit()
-
-        flash("Succesfully updated your color!")
-        return render_template("dashboard/embed.html")
-
-        
+    pass
 
 
 @app.route('/users', methods=['GET', 'POST'])
@@ -193,6 +168,9 @@ def users(id):
     else:
 
         return render_template('users/users.html', info=info)
+
+
+
 
 
 
@@ -225,6 +203,9 @@ def share():
 def source():
     return redirect(location="https://github.com/SawshaDev/hosst")
 
+@app.route('/upload')
+def upload_file():
+    return render_template('upload/upload.html')
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -245,12 +226,12 @@ def upload():
         elif size > 6000000:
             return 'File size too large', 400
 
-        filename = secrets.token_urlsafe(5)
-        file.save(os.path.join(storage_folder, filename + extension))
-        
-        json.dumps({"filename": filename, "extension": extension}) 
 
-        return redirect(f'/{filename+extension}')
+        filename = secrets.token_urlsafe(5)
+        file.save(os.path.join(f"{storage_folder+current_user.username}", filename + extension))
+        
+
+        return json.dumps({"filename": filename, "extension": extension}) 
 
         
 @app.route('/imgs/<filename>')
@@ -264,12 +245,11 @@ def embed(filename=None):
     url = request.root_url
     folder = os.path.join('./', storage_folder+f'/{filename}')
 
-
     if filename.endswith(tuple(extensions)):
-        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename)
+        return render_template("images/embed2.html", folder=storage_folder)
     else:
 
-        return render_template("images/embed.html", folder=folder, url=url, filename=filename)
+        return render_template("images/embed.html", filename=filename, url=url)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -316,7 +296,10 @@ def register():
                             password=hashed_password, user_id=str(user_id), ip=ip)
             db.session.add(new_user)
             db.session.commit()
-            folder.create_folder(username=form.username.data)
+            folder.create_folder.folder(username=form.username.data)
+
+
+            print(os.path.join('/' + storage_folder, f"{form.username.data}"))
 
             return redirect(url_for('login'))
 
