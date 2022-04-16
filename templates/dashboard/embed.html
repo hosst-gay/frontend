@@ -1,0 +1,16 @@
+<html>
+   <body>
+      
+    {% extends "layout.html" %}
+    {% block body %}
+        <form method = "POST" 
+            enctype = "multipart/form-data">
+            Enter a hex code!
+            <br>
+            <input name = "image" />
+            <input type = "submit"/>
+      </form>   
+    {% endblock %}
+
+   </body>
+</html>
