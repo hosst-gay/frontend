@@ -1,5 +1,5 @@
 
-from asyncio.log import logger
+import logger
 from flask import Flask, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for, flash
 from io import BytesIO
 from werkzeug.middleware.proxy_fix import ProxyFix
