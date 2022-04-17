@@ -26,7 +26,8 @@ After you run that, go into the python shell and run
 > db.create_all()
 ```
 
-That will create the database.db file and make all the characteristics and columns of the DB.
+This should create a few .db files which are the following, image.db, embed.db, and database.db
+image.db is responsible for data of an image, embed.db is for embed customization, and database.db is for user logins, etc.
 
 What you can do to make sure it all worked is by typing in
 
