@@ -1,4 +1,5 @@
 
+from asyncio.log import logger
 from flask import Flask, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for, flash
 from io import BytesIO
 from werkzeug.middleware.proxy_fix import ProxyFix
@@ -259,12 +260,20 @@ def upload():
 
         filename = secrets.token_urlsafe(5)
         file.save(os.path.join(storage_folder+current_user.username, filename + extension))
-        file_info = image(username=current_user.username,filename=filename+extension)
-        db.session.add(file_info)
-        db.session.commit()
-        json.dumps({"filename": filename, "extension": extension}) 
-
-        return redirect(f'/{filename+extension}')
+        
+        try:
+            file_info = image(username=current_user.username,filename=filename+extension)
+        
+            db.session.add(file_info)
+        
+            db.session.commit()
+        except Exception as e:
+            logger.error(e)
+            
+    
+        
+        flash(redirect(f'/{filename+extension}'))
+        return json.dumps({"filename": filename, "extension": extension})  
 
         
 @app.route('/imgs/<filename>')
