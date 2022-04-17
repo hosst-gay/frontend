@@ -34,7 +34,13 @@ What you can do to make sure it all worked is by typing in
 ```sh
 > sqlite3 database.db
 > .table
+> .schema
 ```
+note: You might need to do this for all of the .db files to 
+a: make sure all tables are there
+b: make sure the schema matches the one i the class with db.Model
+
+
 
 if the tables shows "user" then it has worked.
 
