@@ -286,7 +286,10 @@ def embed(filename=None):
     extensions = ['.mp4', '.webm', '.mov']
     url = request.root_url
     folder = os.path.join('./', storage_folder+f'/{filename}')
+    color = Embed.query.filter_by(username=current_user).first()
+    color.color
 
+    print(color)
 
     if filename.endswith(tuple(extensions)):
         return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename)
