@@ -112,6 +112,7 @@ class image(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     filename = db.Column(db.String(10), nullable=False)
+    location = db.Column(db.String(100), nullable=False)
 
 
 
@@ -260,9 +261,10 @@ def upload():
 
         filename = secrets.token_urlsafe(5)
         file.save(os.path.join(path_to_save+current_user.username, filename + extension))
+        location = os.path.join(path_to_save+current_user.username, filename+extension)
         
         try:
-            file_info = image(username=current_user.username,filename=filename+extension)
+            file_info = image(username=current_user.username,filename=filename+extension, location=location)
         
             db.session.add(file_info)
         
@@ -275,7 +277,9 @@ def upload():
         
 @app.route('/imgs/<filename>')
 def sendfile(filename=None):
-    return send_from_directory(storage_folder, filename)
+    imageshit = image.query.filter_by(filename=filename).first()
+    username = imageshit.username
+    return send_from_directory(path_to_save+username, filename)
     
 
 @app.route("/<filename>")
@@ -283,16 +287,29 @@ def embed(filename=None):
     extensions = ['.mp4', '.webm', '.mov']
     url = request.root_url
     folder = os.path.join('./', storage_folder+f'/{filename}')
-    color = Embed.query.filter_by(username=current_user).first()
-    color.color
+    
+    imageshit = image.query.filter_by(filename=filename).first()
 
-    print(color)
+
+    if imageshit is None:
+        return abort(404)
+    
+    username = imageshit.username
+
+
+    color1 = Embed.query.filter_by(username=username).first()
+    color = color1.color
+
+    
+
+
+    print(color1.color)
 
     if filename.endswith(tuple(extensions)):
         return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename)
     else:
 
-        return render_template("images/embed.html", folder=folder, url=url, filename=filename)
+        return render_template("images/embed.html", folder=folder, url=url, filename=filename, color=color)
 
 
 @app.route('/login', methods=["GET", "POST"])
