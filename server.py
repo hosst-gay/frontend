@@ -47,7 +47,10 @@ allowed_ips = [f'http://localhost:{port}', f'localhost:{port}', f'127.0.0.1:{por
 
 
 
-
+def folder_shit(username):
+    return size.get_folder_size(f"/mnt/volume_nyc1_02/imgs/{username}")
+def folder_shit2(username):
+    return os.listdir(os.path.join(path_to_save, username)) 
 
 
 def block_method():
@@ -124,6 +127,9 @@ class RegisterForm(FlaskForm):
         min=4, max=50)], render_kw={"placeholder": "Password"})
 
     submit = SubmitField("Register")
+    basepath = f"static/{username}/Images"
+    dir = os.walk(basepath)
+    file_list = []
 
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(
@@ -154,10 +160,10 @@ def gfg():
 def dash():
     for user in db.session.query(User.username).distinct():
         print(user)
-    list = os.listdir(storage_folder)  # dir is your directory path
+    list = folder_shit2(username=current_user.username)  # dir is your directory path
     number_files = len(list)
 
-    return render_template("dashboard/dash.html", uptime=uptime, files=number_files, size=folder_size)
+    return render_template("dashboard/dash.html", uptime=uptime, files=number_files, size=folder_shit(username=current_user.username))
 
 
 @app.route('/dashboard/embed')
@@ -183,7 +189,11 @@ def embed_processing():
         flash("Succesfully updated your color!")
         return render_template("dashboard/embed.html")
 
-        
+@app.route("/gallery")
+@login_required
+def gallery():
+    pass
+
 
 
 @app.route('/users', methods=['GET', 'POST'])
@@ -272,7 +282,8 @@ def upload():
         except Exception as e:
             print(e)
 
-        return json.dumps({"filename": filename, "extension": extension})  
+    return json.dumps({"filename": filename, "extension": extension})  
+        
 
         
 @app.route('/imgs/<filename>')
@@ -306,10 +317,10 @@ def embed(filename=None):
     print(color1.color)
 
     if filename.endswith(tuple(extensions)):
-        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename)
+        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename, color=color)
     else:
 
-        return render_template("images/embed.html", folder=folder, url=url, filename=filename, color=color)
+        return render_template("images/embed.html", folder=storage_folder, url=url, filename=filename, color=color)
 
 
 @app.route('/login', methods=["GET", "POST"])
