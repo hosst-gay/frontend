@@ -25,7 +25,7 @@ admin = ["sawsha"]
 allowed_extension = ['.png', '.jpeg', '.jpg', '.gif', '.webm', '.mp4']
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
 storage_folder = '/mnt/volume_nyc1_02/imgs'
-
+path_to_save = '/mnt/volume_nyc1_02/imgs/'
 
 app = Flask(__name__)
 db = SQLAlchemy(app)
@@ -110,7 +110,7 @@ class Embed(db.Model):
 class image(db.Model):
     __bind_key__ = 'image'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), nullable=False, unique=True)
+    username = db.Column(db.String(80), nullable=False)
     filename = db.Column(db.String(10), nullable=False)
 
 
@@ -259,7 +259,7 @@ def upload():
             return 'File size too large', 400
 
         filename = secrets.token_urlsafe(5)
-        file.save(os.path.join(storage_folder+current_user.username, filename + extension))
+        file.save(os.path.join(path_to_save+current_user.username, filename + extension))
         
         try:
             file_info = image(username=current_user.username,filename=filename+extension)
@@ -268,11 +268,8 @@ def upload():
         
             db.session.commit()
         except Exception as e:
-            logger.error(e)
-            
-    
-        
-        flash(redirect(f'/{filename+extension}'))
+            print(e)
+
         return json.dumps({"filename": filename, "extension": extension})  
 
         
