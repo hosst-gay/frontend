@@ -18,7 +18,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 
 
 from utils import size, uptime, userid, folder
-from utils.sxcu import sharex
+from utils.sxcu import sxcu
 
 
 secret_key = 'SawshaIsCute'
