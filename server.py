@@ -225,7 +225,7 @@ def sxcu():
     secret = str(current_user.user_id)
     username = current_user.username
 
-    sharex.sharex(secret=secret, username=username)
+    sharex.sxcu(secret=secret, username=username)
 
     path = f'sxcu/{username}/'
 
