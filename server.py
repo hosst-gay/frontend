@@ -14,6 +14,7 @@ from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
 import json
 from pathlib import Path
+from werkzeug.datastructures import ImmutableMultiDict
 
 
 from utils import size, uptime, userid, folder
@@ -36,7 +37,6 @@ app.config['SQLALCHEMY_BINDS'] = {
     'embed':'sqlite:///embed.db',
     'image':'sqlite:///image.db'
 }
-app.config['SQLALCHEMY_ECHO'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
 uptime = uptime.uptime()
 folder_size = size.get_folder_size("/mnt/volume_nyc1_02/imgs")
@@ -67,7 +67,7 @@ def block_method():
 
 @app.errorhandler(403)
 def forbidden(e):
-    return render_template('errors/403.html'), 403
+    return render_template('errors/https://discord.com/api/webhooks/965468843306811432/6qvc-V2gwoxg7REXS3uGtErgqgPczydjFM_rfXnIZfW9_q-VDK59lDpJgv_CtQQc7Tur403.html'), 403
 
 
 @app.errorhandler(404)
@@ -102,13 +102,14 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     user_id = db.Column(db.String(50), nullable=False, unique=True)
-    ip = db.Integer()
+    ip = db.Column(db.Integer)
 
 class Embed(db.Model):
     __bind_key__ = 'embed'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
     color = db.Column(db.String(30), nullable=False)
+    title = db.Column(db.String(30), nullable=False)
 
 class image(db.Model):
     __bind_key__ = 'image'
@@ -116,6 +117,7 @@ class image(db.Model):
     username = db.Column(db.String(80), nullable=False)
     filename = db.Column(db.String(10), nullable=False)
     location = db.Column(db.String(100), nullable=False)
+    secret = db.Column(db.String(50), nullable=False)
 
 
 
@@ -174,7 +176,7 @@ def embed_stuff():
 @app.route('/dashboard/embed', methods=['POST'])
 def embed_processing():
     if request.method == 'POST':
-        req = request.form['image']
+        req = request.form['color']
         username = current_user.username
         
         if Embed.query.filter_by(username=username) is not None:
@@ -188,6 +190,7 @@ def embed_processing():
 
         flash("Succesfully updated your color!")
         return render_template("dashboard/embed.html")
+
 
 @app.route("/gallery")
 @login_required
@@ -253,36 +256,55 @@ def upload_file():
 @app.route('/upload', methods=['POST'])
 def upload():
     if request.method == 'POST':
+        pernis = request.form.to_dict(flat=False)['secret_key'][0]
+        result = User.query.filter_by(user_id=pernis).first()
+        print(pernis)
+        remember=request.form.get('secret_key')      
+
+        if result is not None:
+            secret = result.user_id
+        else:
+            secret = remember
+
+
         ip = request.environ.get('REMOTE_ADDR')
         if ip in ip_ban_list:
             return 'Blacklist IP!', 403
-
-        '''Get file object from POST request, extract and define needed variables for future use.'''
-        file = request.files['image']
-        extension = splitext(file.filename)[1]
-        file.flush()
-        size = os.fstat(file.fileno()).st_size
-        '''Check for file extension and file size.'''
-        if extension not in allowed_extension:
-            return 'File type is not supported', 415
-
-        elif size > 6000000:
-            return 'File size too large', 400
-
-        filename = secrets.token_urlsafe(5)
-        file.save(os.path.join(path_to_save+current_user.username, filename + extension))
-        location = os.path.join(path_to_save+current_user.username, filename+extension)
         
-        try:
-            file_info = image(username=current_user.username,filename=filename+extension, location=location)
-        
-            db.session.add(file_info)
-        
-            db.session.commit()
-        except Exception as e:
-            print(e)
 
-    return json.dumps({"filename": filename, "extension": extension})  
+        
+        elif request.form.to_dict(flat=False)['secret_key'][0] ==  secret:
+
+            '''Get file object from POST request, extract and define needed variables for future use.'''
+            file = request.files['image']
+            extension = splitext(file.filename)[1]
+            file.flush()
+            size = os.fstat(file.fileno()).st_size
+            '''Check for file extension and file size.'''
+            if extension not in allowed_extension:
+                return 'File type is not supported', 415
+
+            elif size > 6000000:
+                return 'File size too large', 400
+
+            filename = secrets.token_urlsafe(5)
+            file.save(os.path.join(path_to_save+result.username, filename + extension))
+            location = os.path.join(path_to_save+result.username, filename+extension)
+        
+            try:
+                file_info = image(username=result.username,filename=filename+extension, location=location, secret=result.user_id)
+        
+                db.session.add(file_info)
+        
+                db.session.commit()
+            except Exception as e:
+                print(e)
+
+
+            return json.dumps({"filename": filename, "extension": extension})
+        else:
+            return 'Unauthorized use', 401
+    
         
 
         
@@ -312,7 +334,7 @@ def embed(filename=None):
     color = color1.color
 
     
-
+    print()
 
     print(color1.color)
 
