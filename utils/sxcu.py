@@ -2,7 +2,6 @@ import json
 import os
 
 class sharex:
-    @property
     def sxcu(secret, username=None):
         
         """Creates .sxcu files for configurations made for sharex"""
@@ -32,7 +31,7 @@ class sharex:
         with open(f'{path}/hosst.gay.sxcu', 'w')as f:
             json.dump(sharex,  f, default=set_default, indent=2)
 
-    @property
+
     def sharenix(secret, username=None):
         """Creates the .sharenix.json file needed for users on linux using sharenix"""
         def set_default(obj):

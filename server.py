@@ -18,7 +18,7 @@ from werkzeug.datastructures import ImmutableMultiDict
 
 
 from utils import size, uptime, userid, folder
-from utils.sxcu import sxcu
+from utils.sxcu import sharex
 
 
 secret_key = 'SawshaIsCute'
@@ -239,7 +239,7 @@ def share():
 
     sharex.sharenix(secret=secret, username=username)
 
-    path = f'sxcu/{username}/'
+    path = f'sxcu/{username}'
 
     return send_from_directory(path, ".sharenix.json")
 
