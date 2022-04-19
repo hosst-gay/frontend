@@ -5,6 +5,13 @@ This is the source for the best free open sourced sharex image uploader
 # Useful Links
 Website: https://hosst.gay
 
+# Requirements
+In order to self-host this on your own machine/vps
+There are a few requirements in order too use it.
+--------------------------------------------------
+- Python version: python3.8 or above
+- Flask
+- sqlite3 (will not work with basic sqlite but most linux systems come preinstalled with sqlite3
 
 
 # Self-hosting
