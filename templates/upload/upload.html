@@ -1,10 +1,19 @@
 <html>
    <body>
-	<form action = "{{host}}upload" method = "POST" 
-         enctype = "multipart/form-data">
-         <input type = "file" name = "image" />
-         <input type="text", name="secret_key">
-         <input type = "submit"/>
-      </form>   
+	
+      {% extends "layout.html" %}
+      {% block body %}
+         <form action = "{{host}}upload" method = "POST" 
+            enctype = "multipart/form-data">
+            <input type = "file" name = "image" />
+            <br>
+            <br>
+            Enter your secret key which you can find at <a href="/dashboard">The Dashboard.</a>
+            <br>
+            <br>
+            <input type="text", name="secret_key">
+            <input type = "submit"/>
+         </form>   
+      {% endblock %}
    </body>
 </html>

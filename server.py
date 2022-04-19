@@ -67,7 +67,7 @@ def block_method():
 
 @app.errorhandler(403)
 def forbidden(e):
-    return render_template('errors/https://discord.com/api/webhooks/965468843306811432/6qvc-V2gwoxg7REXS3uGtErgqgPczydjFM_rfXnIZfW9_q-VDK59lDpJgv_CtQQc7Tur403.html'), 403
+    return render_template('errors/403.html'), 403
 
 
 @app.errorhandler(404)
@@ -91,10 +91,6 @@ def load_user(user_id):
     id = User.query.get(int(user_id))
     print(id)
     return id
-
-
-def create_uuid():
-    return userid.user_id()
 
 
 class User(db.Model, UserMixin):
@@ -129,9 +125,6 @@ class RegisterForm(FlaskForm):
         min=4, max=50)], render_kw={"placeholder": "Password"})
 
     submit = SubmitField("Register")
-    basepath = f"static/{username}/Images"
-    dir = os.walk(basepath)
-    file_list = []
 
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(
@@ -153,7 +146,7 @@ class LoginForm(FlaskForm):
 
 
 @app.route("/", methods=["GET"])
-def gfg():
+def home():
     return render_template("home/home.html")
 
 
@@ -274,7 +267,6 @@ def upload():
             return 'Blacklist IP!', 403
         
 
-        
         elif request.form.to_dict(flat=False)['secret_key'][0] ==  secret:
 
             '''Get file object from POST request, extract and define needed variables for future use.'''
@@ -290,6 +282,7 @@ def upload():
                 return 'File size too large', 400
 
             filename = secrets.token_urlsafe(5)
+
             file.save(os.path.join(path_to_save+result.username, filename + extension))
             location = os.path.join(path_to_save+result.username, filename+extension)
         
@@ -308,21 +301,16 @@ def upload():
             return 'Unauthorized use', 401
     
         
-
-        
 @app.route('/imgs/<filename>')
 def sendfile(filename=None):
     imageshit = image.query.filter_by(filename=filename).first()
     username = imageshit.username
     return send_from_directory(path_to_save+username, filename)
     
-
 @app.route("/<filename>")
 def embed(filename=None):
     extensions = ['.mp4', '.webm', '.mov']
-    url = request.root_url
-    folder = os.path.join('./', storage_folder+f'/{filename}')
-    
+    url = request.root_url    
     imageshit = image.query.filter_by(filename=filename).first()
 
 
@@ -339,13 +327,16 @@ def embed(filename=None):
     else:
         color = "#b15141"
 
+    
+
+    
         
 
     
     print(color)
 
     if filename.endswith(tuple(extensions)):
-        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename, color=color)
+        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename, color=color, username=username)
     else:
 
         return render_template("images/embed.html", folder=storage_folder, url=url, filename=filename, color=color, username=username)
@@ -369,7 +360,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('gfg'))
+    return redirect(url_for('home'))
 
 
 @app.route('/register', methods=['GET', 'POST'])
