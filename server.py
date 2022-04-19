@@ -43,7 +43,7 @@ folder_size = size.get_folder_size("/mnt/volume_nyc1_02/imgs")
 port = 5001
 
 ip_ban_list = []
-allowed_ips = [f'http://localhost:{port}', f'localhost:{port}', f'127.0.0.1:{port}']
+allowed_ips = [f'http://localhost:{port}', f'localhost:{port}', f'127.0.0.1:{port}'] #not in use rn but will be soon for some ip only shit
 
 
 
@@ -152,7 +152,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def gfg():
     return render_template("home/home.html")
 
@@ -251,7 +251,9 @@ def source():
 @app.route('/upload')
 @login_required
 def upload_file():
-    return render_template('upload/upload.html')
+    host = request.root_url
+
+    return render_template('upload/upload.html', host=host)
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -331,18 +333,22 @@ def embed(filename=None):
 
 
     color1 = Embed.query.filter_by(username=username).first()
-    color = color1.color
+
+    if color1 is not None:
+        color = color1.color
+    else:
+        color = "#b15141"
+
+        
 
     
-    print()
-
-    print(color1.color)
+    print(color)
 
     if filename.endswith(tuple(extensions)):
         return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename, color=color)
     else:
 
-        return render_template("images/embed.html", folder=storage_folder, url=url, filename=filename, color=color)
+        return render_template("images/embed.html", folder=storage_folder, url=url, filename=filename, color=color, username=username)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -388,6 +394,12 @@ def register():
             new_user = User(username=form.username.data,
                             password=hashed_password, user_id=str(user_id), ip=ip)
             db.session.add(new_user)
+
+            embed_shit = Embed(username=form.username.data, color="#b15141", title="false")
+            db.session.add(embed_shit)
+
+
+            db.session.commit()
             db.session.commit()
             folder.create_folder.folder(username=form.username.data)
 
