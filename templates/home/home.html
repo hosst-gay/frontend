@@ -91,7 +91,7 @@ p {
     font-family: 'Noah', sans-serif;
     color: rgb(180, 180, 180);
     font-size: 16px;
-    text-align: left;
+    text-align: center;
 }
 
 p.link {
@@ -127,7 +127,8 @@ p.link > a > button:hover {
 <body>
 
     <center>
-        
+        {% extends "layout.html" %}
+        {% block body %} 
         <div id="main-content">
             <Script>alert("if you registered before 4/18/22 please join discord.gg/sTHv4CwFnG for account recovery \n All accounts saved were purged due to an error with our host that purged a lot of shit");</Script>
             
@@ -140,9 +141,15 @@ p.link > a > button:hover {
             
             </b></h1>
 
+            
+            <div class="card small">
+                <center><p style="text-shadow:2px 2px 2px black; color:#af812c"><b>Important Info</b></p></center>
+                <p class="link" id="update-section" style="display: block;"><a href='/privacy'><button>Privacy</button></a></p>
+            </div>
             <div class="card small">
                 <p class="link" id="update-section" style="display: block;"><a href="/login"><button>Login</button></a></p>
                 <p class="link" id="update-section" style="display: block;"><a href="/register"><button>Register</button></a></p>
+              
             </div>
 
 
@@ -150,6 +157,7 @@ p.link > a > button:hover {
             </div>
 
         </div>
+        {% endblock %}
 
         
 

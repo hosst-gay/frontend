@@ -1,4 +1,5 @@
 
+from time import sleep
 import logger
 from flask import Flask, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for, flash
 from io import BytesIO
@@ -32,10 +33,10 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config["SECRET_KEY"] = "SawshaIsCute"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///schema/database.db'
 app.config['SQLALCHEMY_BINDS'] = {
-    'embed':'sqlite:///embed.db',
-    'image':'sqlite:///image.db'
+    'embed':'sqlite:///schema/embed.db',
+    'image':'sqlite:///schema/image.db'
 }
 app.wsgi_app = ProxyFix(app.wsgi_app)
 uptime = uptime.uptime()
@@ -302,16 +303,28 @@ def upload():
                 print(e)
 
 
-            return json.dumps({"filename": filename, "extension": extension})
+            json.dumps({"filename": filename, "extension": extension})
         else:
             return 'Unauthorized use', 401
     
+@app.route('/upload', methods=['POST'])
+def upload1():
+    if request.method == "POST":
+        pass
         
 @app.route('/imgs/<filename>')
 def sendfile(filename=None):
-    imageshit = image.query.filter_by(filename=filename).first()
-    username = imageshit.username
-    return send_from_directory(path_to_save+username, filename)
+    
+    try:
+        imageshit = image.query.filter_by(filename=filename).first()
+    except (Exception) as e:
+        print(e)
+
+    if imageshit is None:
+        return abort(404)
+    else:
+        username = imageshit.username
+        return send_from_directory(path_to_save+username, filename)
     
 
 @app.route("/<filename>")
@@ -357,6 +370,14 @@ def login():
                 return redirect(url_for('dash'))
     return render_template('login/login.html', form=form)
 
+@app.route("/delete", methods=['GET', 'POST'])
+@login_required
+def delete():
+    User.query.filter_by(username=current_user.username).delete()
+    db.session.commit()
+    Embed.query.filter_by(username=current_user.username).delete()
+    db.session.commit()
+    return redirect(url_for('home'))
 
 @app.route('/logout', methods=['GET', 'POST'])
 @login_required
@@ -385,7 +406,7 @@ def register():
         else:
 
             new_user = User(username=form.username.data,
-                            password=hashed_password, user_id=str(user_id), ip=ip)
+                            password=hashed_password, user_id=str(user_id))
             db.session.add(new_user)
 
             embed_shit = Embed(username=form.username.data, color="#b15141", title="false")
