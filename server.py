@@ -67,7 +67,7 @@ def block_method():
 
 @app.errorhandler(403)
 def forbidden(e):
-    return render_template('errors/403.html'), 403
+    return render_template('errors/https://discord.com/api/webhooks/965468843306811432/6qvc-V2gwoxg7REXS3uGtErgqgPczydjFM_rfXnIZfW9_q-VDK59lDpJgv_CtQQc7Tur403.html'), 403
 
 
 @app.errorhandler(404)
@@ -98,7 +98,6 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
     user_id = db.Column(db.String(50), nullable=False, unique=True)
-    ip = db.Column(db.Integer)
 
 class Embed(db.Model):
     __bind_key__ = 'embed'
@@ -126,6 +125,7 @@ class RegisterForm(FlaskForm):
 
     submit = SubmitField("Register")
 
+
     def validate_username(self, username):
         existing_user_username = User.query.filter_by(
             username=username.data).first()
@@ -148,6 +148,11 @@ class LoginForm(FlaskForm):
 @app.route("/", methods=["GET"])
 def home():
     return render_template("home/home.html")
+
+@app.route("/privacy")
+def privacy():
+    return render_template("tos/privacy.html")
+
 
 
 @app.route("/dashboard")
@@ -283,6 +288,7 @@ def upload():
 
             filename = secrets.token_urlsafe(5)
 
+            
             file.save(os.path.join(path_to_save+result.username, filename + extension))
             location = os.path.join(path_to_save+result.username, filename+extension)
         
@@ -307,6 +313,7 @@ def sendfile(filename=None):
     username = imageshit.username
     return send_from_directory(path_to_save+username, filename)
     
+
 @app.route("/<filename>")
 def embed(filename=None):
     extensions = ['.mp4', '.webm', '.mov']
@@ -326,11 +333,6 @@ def embed(filename=None):
         color = color1.color
     else:
         color = "#b15141"
-
-    
-
-    
-        
 
     
     print(color)
