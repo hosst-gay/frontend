@@ -78,7 +78,11 @@ def page_not_found(e):
 @app.errorhandler(405)
 def method_not_allowed(e):
     return render_template('errors/405.html'), 405
+)
 
+    if filename.endswith(tuple(extensions)):
+        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename, color=color, username=username)
+    else:
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -375,7 +379,6 @@ def register():
         hashed_password = bcrypt.generate_password_hash(form.password.data)
 
         user = User.query.filter_by(username=form.username.data).first()
-        ip = request.environ.get('REMOTE_ADDR')
 
         if len(form.password.data) >= 45:
             raise ValidationError("Password is too long!")
@@ -385,7 +388,7 @@ def register():
         else:
 
             new_user = User(username=form.username.data,
-                            password=hashed_password, user_id=str(user_id), ip=ip)
+                            password=hashed_password, user_id=str(user_id))
             db.session.add(new_user)
 
             embed_shit = Embed(username=form.username.data, color="#b15141", title="false")
