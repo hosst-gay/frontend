@@ -79,11 +79,8 @@ def page_not_found(e):
 @app.errorhandler(405)
 def method_not_allowed(e):
     return render_template('errors/405.html'), 405
-)
 
-    if filename.endswith(tuple(extensions)):
-        return render_template("images/embed2.html", folder=storage_folder, url=url, filename=filename, color=color, username=username)
-    else:
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
