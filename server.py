@@ -67,7 +67,7 @@ def block_method():
 
 @app.errorhandler(403)
 def forbidden(e):
-    return render_template('errors/https://discord.com/api/webhooks/965468843306811432/6qvc-V2gwoxg7REXS3uGtErgqgPczydjFM_rfXnIZfW9_q-VDK59lDpJgv_CtQQc7Tur403.html'), 403
+    return render_template('errors/403.html'), 403
 
 
 @app.errorhandler(404)
