@@ -6,3 +6,5 @@ class create_folder:
         path = f'/mnt/volume_nyc1_02/imgs/{username}/'
         os.makedirs(path, exist_ok=True)
 
+
+
