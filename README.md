@@ -3,7 +3,8 @@
 This is the source for the best free open sourced sharex image uploader
 
 # Useful Links
-Website: https://hosst.gay
+Website: https://hosst.gay <br>
+Discord: https://discord.gg/sTHv4CwFnG
 
 # Requirements
 In order to self-host this on your own machine/vps
