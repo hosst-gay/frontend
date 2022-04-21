@@ -18,9 +18,9 @@ from pathlib import Path
 from werkzeug.datastructures import ImmutableMultiDict
 
 
-from utils import size, uptime, userid, folder
+from utils import size, userid, folder
 from utils.sxcu import sharex
-
+from utils.uptime import uptime as uptimea
 
 secret_key = 'SawshaIsCute'
 admin = ["sawsha"]
@@ -40,7 +40,6 @@ app.config['SQLALCHEMY_BINDS'] = {
 }
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
-uptime = uptime.uptime()
 folder_size = size.get_folder_size("/mnt/volume_nyc1_02/imgs")
 port = 5001
 
@@ -168,6 +167,7 @@ def dash():
         print(user)
     list = folder_shit2(username=current_user.username)  # dir is your directory path
     number_files = len(list)
+    uptime = uptimea()
 
     return render_template("dashboard/dash.html", uptime=uptime, files=number_files, size=folder_shit(username=current_user.username))
 
@@ -229,7 +229,6 @@ def users(id):
 def sxcu():
     secret = str(current_user.user_id)
     username = current_user.username
-
     sharex.sxcu(secret=secret, username=username)
 
     path = f'sxcu/{username}/'
@@ -241,12 +240,14 @@ def sxcu():
 def source():
     return redirect(location="https://github.com/SawshaDev/hosst")
 
+
 @app.route('/upload')
 @login_required
 def upload_file():
     host = request.root_url
 
     return render_template('upload/upload.html', host=host)
+
 
 @app.route('/upload', methods=['POST'])
 def upload():
@@ -311,7 +312,7 @@ def sendfile(filename=None):
         print(e)
 
     if imageshit is None:
-        return abort(404)
+        return abort(Response("<center>Raw Image Not Found. <br> If This Is A Mistake, Please Contact Us At <a href='https://discord.gg/sTHv4CwFnG'>Our Discord</a></center>"), 404)
     else:
         username = imageshit.username
         return send_from_directory(path_to_save+username, filename)

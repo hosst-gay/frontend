@@ -1,7 +1,7 @@
 {
     "apps": [
       {
-        "name":"backend",
+        "name":"hosst.gay",
         "script":"server.py",
         "interpreter" : "python3",
         "interpreter_args": "-u"
