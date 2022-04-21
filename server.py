@@ -155,6 +155,9 @@ def home():
 def privacy():
     return render_template("tos/privacy.html")
 
+@app.route("/tos")
+def tos():
+    return render_template("tos/tos.html")
 
 
 @app.route("/dashboard")
@@ -303,15 +306,11 @@ def upload():
             except Exception as e:
                 print(e)
 
-
-            json.dumps({"filename": filename, "extension": extension})
+            return redirect(f"/{filename+extension}")
         else:
             return 'Unauthorized use', 401
     
-@app.route('/upload', methods=['POST'])
-def upload1():
-    if request.method == "POST":
-        pass
+
         
 @app.route('/imgs/<filename>')
 def sendfile(filename=None):

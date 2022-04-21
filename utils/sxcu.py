@@ -22,7 +22,7 @@ class sharex:
             "Arguments": {
                 "secret_key": f"{str(secret)}"
             },
-            "URL": "https://hosst.gay/$json:filename$$json:extension$"
+            "URL": "$responseurl$"
         }      
 
         path = f'sxcu/{username}/'
@@ -61,7 +61,7 @@ class sharex:
                 "ResponseType": "Text",
                 "FileFormName": "image",
                 "key": "SawshaIsCute",
-                "URL": "https://cdn.skyebot.dev/$json:filename$$json:extension$"
+                "URL": "$responseurl$"
             }]
         }
         path = f'sxcu/{username}/'
