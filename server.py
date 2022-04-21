@@ -38,6 +38,7 @@ app.config['SQLALCHEMY_BINDS'] = {
     'embed':'sqlite:///schema/embed.db',
     'image':'sqlite:///schema/image.db'
 }
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
 uptime = uptime.uptime()
 folder_size = size.get_folder_size("/mnt/volume_nyc1_02/imgs")
@@ -177,11 +178,11 @@ def embed_stuff():
     return render_template('dashboard/embed.html')
 
 @app.route('/dashboard/embed', methods=['POST'])
+@login_required
 def embed_processing():
     if request.method == 'POST':
         req = request.form['color']
         username = current_user.username
-        
         if Embed.query.filter_by(username=username) is not None:
             embed = Embed.query.filter_by(username=username).first()
             embed.color = req
@@ -193,6 +194,7 @@ def embed_processing():
 
         flash("Succesfully updated your color!")
         return render_template("dashboard/embed.html")
+
 
 
 @app.route("/gallery")
@@ -233,18 +235,6 @@ def sxcu():
     path = f'sxcu/{username}/'
 
     return send_from_directory(path, "hosst.gay.sxcu")
-
-
-@app.route("/sharenix")
-def share():
-    secret = str(current_user.user_id)
-    username = current_user.username
-
-    sharex.sharenix(secret=secret, username=username)
-
-    path = f'sxcu/{username}'
-
-    return send_from_directory(path, ".sharenix.json")
 
 
 @app.route("/source")

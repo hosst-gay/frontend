@@ -170,26 +170,26 @@ p.link > a > button:hover {
                                        		Remember! Do not share this secret with ANYONE!
                                        		<h2 class="secret"style="text-shadow:2px 2px  black">{{current_user.user_id}}</h2>
 
-        
+                                        <p class="card-title">User settings</p>
+                                        <div class="card-divider"></div>
                                         </div>
                                 </div>
                             </div>
-                            
                         <div class="card small", style="float:left">
                         <p class="card-title">Configuration Files</p>
                                 
                                 <div class="card-divider"></div>
                                 <div class="card-custom-content">
+                                    <p class="link" id="update-section" style="display: block;"><a href="/dashboard/embed"><button>Change Embed</button></a></p> 
                                     <p class="link" id="update-section" style="display: block;"><a href="/upload"><button>Upload</button></a></p> 
                                     <p class="link" id="update-section" style="display: block;"><a href="/sxcu"><button>ShareX Configuration</button></a></p>
-                                    <p class="link" id="update-section" style="display: block;"><a href="/sharenix" download><button>ShareNix Configuration</button></a></p>
-                                    
                                     <p class="link f" id="update-section" style="display: block;"><a href="/source"><button>Source Code</button></a></p>
                                     <br>
                                     <a href="{{ url_for('logout') }}">Press here to logout of this account.</a>
                                 </div>
                             </div>
                         </div>
+
 
                     
                     </div>  

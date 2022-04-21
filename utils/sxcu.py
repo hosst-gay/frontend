@@ -33,7 +33,7 @@ class sharex:
 
 
     def sharenix(secret, username=None):
-        """Creates the .sharenix.json file needed for users on linux using sharenix"""
+        """Creates the .sharenix.json file needed for users on linux using sharenix (MIGHT BE DEPRECATED SOON)"""
         def set_default(obj):
             if isinstance(obj,set):
                 return list(obj)
