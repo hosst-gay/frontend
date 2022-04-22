@@ -1,8 +1,4 @@
-
-from time import sleep
-import logger
 from flask import Flask, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for, flash
-from io import BytesIO
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 from os.path import splitext
@@ -13,17 +9,12 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-import json
-from pathlib import Path
-from werkzeug.datastructures import ImmutableMultiDict
 
 
 from utils import size, userid, folder
 from utils.sxcu import sharex
 from utils.uptime import uptime as uptimea
 
-secret_key = 'SawshaIsCute'
-admin = ["sawsha"]
 allowed_extension = ['.png', '.jpeg', '.jpg', '.gif', '.webm', '.mp4']
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
 storage_folder = '/mnt/volume_nyc1_02/imgs'
@@ -49,15 +40,12 @@ allowed_ips = [f'http://localhost:{port}', f'localhost:{port}', f'127.0.0.1:{por
 
 
 def folder_shit(username):
+    """Gets size of specified folder, in this case it's your image folder."""
     return size.get_folder_size(f"/mnt/volume_nyc1_02/imgs/{username}")
+
 def folder_shit2(username):
+    """Lists all files/folders in the directory."""
     return os.listdir(os.path.join(path_to_save, username)) 
-
-
-def block_method():
-    ip = request.environ.get('REMOTE_ADDR')
-    if ip in ip_ban_list:
-        return abort(Response(render_template("errors/403.html"), 403))
 
 @app.before_request
 def block_method():
@@ -165,7 +153,7 @@ def tos():
 def dash():
     for user in db.session.query(User.username).distinct():
         print(user)
-    list = folder_shit2(username=current_user.username)  # dir is your directory path
+    list = folder_shit2(username=current_user.username) 
     number_files = len(list)
     uptime = uptimea()
 
@@ -202,8 +190,6 @@ def embed_processing():
 def gallery():
     pass
 
-
-
 @app.route('/users', methods=['GET', 'POST'])
 def user_search():
     users = db.session.query(User.username).all()
@@ -221,8 +207,6 @@ def users(id):
     else:
 
         return render_template('users/users.html', info=info)
-
-
 
 @app.route("/sxcu")
 @login_required
