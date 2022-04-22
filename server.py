@@ -267,37 +267,42 @@ def upload():
         if ip in ip_ban_list:
             return 'Blacklist IP!', 403
         
-
+    
         elif request.form.to_dict(flat=False)['secret_key'][0] ==  secret:
 
             '''Get file object from POST request, extract and define needed variables for future use.'''
-            file = request.files['image']
-            extension = splitext(file.filename)[1]
-            file.flush()
-            size = os.fstat(file.fileno()).st_size
-            '''Check for file extension and file size.'''
-            if extension not in allowed_extension:
-                return 'File type is not supported', 415
 
-            elif size > 6000000:
-                return 'File size too large', 400
+            if result and result.username is not None:
+                file = request.files['image']
+                extension = splitext(file.filename)[1]
+                file.flush()
+                size = os.fstat(file.fileno()).st_size
+                '''Check for file extension and file size.'''
+                if extension not in allowed_extension:
+                    return 'File type is not supported', 415
 
-            filename = secrets.token_urlsafe(5)
+                elif size > 6000000:
+                    return 'File size too large', 400
 
-            
-            file.save(os.path.join(path_to_save+result.username, filename + extension))
-            location = os.path.join(path_to_save+result.username, filename+extension)
+                filename = secrets.token_urlsafe(5)
+                file.save(os.path.join(path_to_save+result.username, filename + extension))
+                location = os.path.join(path_to_save+result.username, filename+extension)
         
-            try:
-                file_info = image(username=result.username,filename=filename+extension, location=location, secret=result.user_id)
+                try:
+                    file_info = image(username=result.username,filename=filename+extension, location=location, secret=result.user_id)
         
-                db.session.add(file_info)
+                    db.session.add(file_info)
         
-                db.session.commit()
-            except Exception as e:
-                print(e)
+                    db.session.commit()
+                except Exception as e:
+                    print(e)
 
-            return redirect(f"/{filename+extension}")
+                print(filename+extension)
+
+                return redirect(f"/{filename+extension}")
+            else:
+                flash("Wrong secret key/no entered secret key")
+                return abort(redirect(f"/upload"),401)
         else:
             return 'Unauthorized use', 401
     
@@ -305,7 +310,6 @@ def upload():
         
 @app.route('/imgs/<filename>')
 def sendfile(filename=None):
-    
     try:
         imageshit = image.query.filter_by(filename=filename).first()
     except (Exception) as e:
