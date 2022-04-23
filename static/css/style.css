@@ -64,7 +64,32 @@ overflow: hidden;
 overflow-x: hidden;
 }
 
+.top-bar {
+    display: flex;
+    height: 5vh;
+    background-color: #1F2421;
+    align-content: center;
+    justify-content: space-around;
+    align-items: center;
+}
+.topLinks, .topLinks:link, .topLinks:visited, .topLinks:focus, .topLinks:hover, .topLinks:active {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+}
 
+.topLinks {
+    font-size:160%;
+
+}
+
+.topLinks:hover {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+    color:darkgrey;
+
+}
 
 span {
     font-style: inherit;

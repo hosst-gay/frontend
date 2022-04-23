@@ -159,6 +159,9 @@ def dash():
 
     return render_template("dashboard/dash.html", uptime=uptime, files=number_files, size=folder_shit(username=current_user.username))
 
+@app.route('/discord')
+def discord():
+    return redirect("https://discord.gg/sTHv4CwFnG")
 
 @app.route('/dashboard/embed')
 @login_required
