@@ -1,19 +1,64 @@
-<html>
-   <body>
-	
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>hosst.gay</title>
+   <link rel="stylesheet" href="/static/css/style.css">
+   <style>
+      
+      root {
+         --bg-color: #5b606b;
+         --nb-color: #36393f;
+
+         --bg-colour: var(--bg-color);
+         --nb-colour: var(--nb-color);
+      }
+
+      input[type="file"] {
+         display: none;
+     }
+     .custom-file-upload {
+         border: 1px solid rgb(214, 183, 183);
+         display: inline-block;
+         padding: 6px 12px;
+         cursor: pointer;
+         color: white;
+         border-radius:8px;
+    
+      }
+
+      .secret {
+         padding: 6px;
+         border: 1px solid rgb(200,200,200);
+         border-radius: 11px;
+         background: white;
+         outline: none;
+         font-size: 13px;
+         font-family: 'Jost', sans-serif;
+     }
+      
+
+   </style>
+<body>
+	<center>
+      
       {% extends "layout.html" %}
       {% block body %}
          <form action = "{{host}}upload" method = "POST" 
             enctype = "multipart/form-data">
-            <input type = "file" name = "image" />
+            <label for="upload" class="custom-file-upload">
+               <i class="fa fa-cloud-upload"></i> Select File
+            </label>   
+            <input type = "file" name = "image" id="upload"/>
             <br>
             <br>
-            Enter your secret key which you can find at <a href="/dashboard">The Dashboard.</a>
-            <br>
-            <br>
-            <input type="text", name="secret_key">
-            <input type = "submit"/>
+            <p style="text-shadow:2px 2px 2px black; color:#af812c; font-size:medium">Enter your secret key which you can find at <a style="text-shadow:2px 2px 2px black; color:#dda130; font-size:medium" href="/dashboard">The Dashboard.</a></p>
+            <input type="text", name="secret_key" class="secret">
+            <input type = "submit" class="secret"/>
          </form>   
       {% endblock %}
-   </body>
+   </center>
+</body>
 </html>
