@@ -394,8 +394,6 @@ def register():
 
             embed_shit = Embed(username=form.username.data, color="#b15141", title="false")
             db.session.add(embed_shit)
-
-
             db.session.commit()
             db.session.commit()
             folder.create_folder.folder(username=form.username.data)

@@ -127,12 +127,46 @@ p.link > a > button:hover {
 
 }
 
+.top-bar {
+    display: flex;
+    height: 5vh;
+    width: 75%;
+    background-color:#36393f;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.topLinks, .topLinks:link, .topLinks:visited, .topLinks:focus, .topLinks:hover, .topLinks:active {
+    color: white;
+    text-shadow: 2px 2px 2px black;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+}
+
+.topLinks {
+    font-size:160%;
+
+}
+
+.topLinks:hover {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+    color:darkgrey;
+
+}
+
 
     </style>
     <center>
-        <script>
-            alert("Warning: Please note there are a few issues with our uploading features on sharenix and sharex. If you experience ANY issues with uploading\nPlease report it to either our github or join our discord: https://discord.gg/sTHv4CwFnG")
-        </script>
+
+
+        <div class="top-bar">
+
+            <span class="topText"><a class="topLinks" href="/source">Source Code</a></span>
+            <span class="topText"><a class="topLinks" href="/discord">Discord</a></span>
+        </div>
+        <br>
         
 
         <div id="main-content">
@@ -179,17 +213,15 @@ p.link > a > button:hover {
                                 
                                 <div class="card-divider"></div>
                                 <div class="card-custom-content">
+                                    <p class="link" id="update-section" style="display: block;"><a href="/upload"><button>Upload</button></a></p>
                                     <p class="link" id="update-section" style="display: block;"><a href="/dashboard/embed"><button>Change Embed</button></a></p> 
-                                    <p class="link" id="update-section" style="display: block;"><a href="/upload"><button>Upload</button></a></p> 
                                     <p class="link" id="update-section" style="display: block;"><a href="/sxcu"><button>ShareX Configuration</button></a></p>
-                                    <p class="link f" id="update-section" style="display: block;"><a href="/source"><button>Source Code</button></a></p>
                                     <br>
-                                    <a href="{{ url_for('logout') }}">Press here to logout of this account.</a>
                                 </div>
                             </div>
                         </div>
 
-
+                        <a href="{{ url_for('logout') }}">Press here to logout of this account.</a>
                     
                     </div>  
                 </div>   
