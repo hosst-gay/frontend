@@ -17,6 +17,8 @@ There are a few requirements in order too use it.
 
 # Self-hosting
 
+**Note: I do not support self-hosting of this service, but however, i will not stop the use of it being self-hosted**
+
 In order to self host, you need to install a few things
 
 First sqlite3 and a python version above python 3.8 (all modules used in this repo require 3.8 or above)
