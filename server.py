@@ -204,12 +204,16 @@ def user_search():
 
 @app.route('/users/<int:id>', methods=['GET', 'POST'])
 def users(id):
-    info = User.query.filter_by(id=id).first()
-    if info is None:
+    userinfo = User.query.filter_by(id=id).first()
+    embedinfo = Embed.query.filter_by(username=userinfo.username).first()
+
+    color = embedinfo.color
+
+    if userinfo is None:
         return abort(404)
     else:
 
-        return render_template('users/users.html', info=info)
+        return render_template('users/users.html', info=userinfo, color = color)
 
 @app.route("/sxcu")
 @login_required
@@ -225,7 +229,7 @@ def sxcu():
 
 @app.route("/source")
 def source():
-    return redirect(location="https://github.com/SawshaDev/hosst")
+    return redirect(location="https://github.com/SawshaDev/hosst.gay")
 
 
 @app.route('/upload')
