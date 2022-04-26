@@ -27,7 +27,8 @@ app.config["SECRET_KEY"] = "SawshaIsCute"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///schema/database.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'embed':'sqlite:///schema/embed.db',
-    'image':'sqlite:///schema/image.db'
+    'image':'sqlite:///schema/image.db',
+    'profile':'sqlite:///schema/profile.db'
 }
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -104,7 +105,9 @@ class image(db.Model):
     location = db.Column(db.String(100), nullable=False)
     secret = db.Column(db.String(50), nullable=False)
 
-
+class profile(db.Model):
+    __bind_key__ = 'profile'
+    id = db.Column(db.Integer, primary_key=True)
 
 class RegisterForm(FlaskForm):
     username = StringField(validators=[InputRequired(), Length(
@@ -272,7 +275,7 @@ def upload():
                 if extension not in allowed_extension:
                     return 'File type is not supported', 415
 
-                elif size > 6000000:
+                elif size > 20480:
                     return 'File size too large', 400
 
                 filename = secrets.token_urlsafe(5)
@@ -298,7 +301,7 @@ def upload():
             return 'Unauthorized use', 401
     
 
-        
+
 @app.route('/imgs/<filename>')
 def sendfile(filename=None):
     try:
@@ -365,6 +368,7 @@ def delete():
     db.session.commit()
     Embed.query.filter_by(username=current_user.username).delete()
     db.session.commit()
+    folder.create_folder.delete(username=current_user.username)
     return redirect(url_for('home'))
 
 @app.route('/logout', methods=['GET', 'POST'])
@@ -400,7 +404,7 @@ def register():
             db.session.add(embed_shit)
             db.session.commit()
             db.session.commit()
-            folder.create_folder.folder(username=form.username.data)
+            folder.folder_control.create(username=form.username.data)
 
             return redirect(url_for('login'))
 

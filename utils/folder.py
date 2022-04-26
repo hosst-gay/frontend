@@ -1,10 +1,14 @@
 import os
 
-class create_folder:
+class folder_control:
 
-    def folder(username):
+    def create(username):
         path = f'/mnt/volume_nyc1_02/imgs/{username}/'
         os.makedirs(path, exist_ok=True)
+
+    def delete(username):
+        path = f'/mnt/volume_nyc1_02/imgs/{username}/'
+        os.removedirs(name=path)
 
 
 
