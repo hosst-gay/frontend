@@ -35,7 +35,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app)
 folder_size = size.get_folder_size("/mnt/volume_nyc1_02/imgs")
 port = 5001
 
-ip_ban_list = []
+ip_ban_list = ['172.69.70.86', '172.69.70.204', '172.69.70.232', '172.69.68.230']
 allowed_ips = [f'http://localhost:{port}', f'localhost:{port}', f'127.0.0.1:{port}'] #not in use rn but will be soon for some ip only shit
 
 
@@ -275,9 +275,12 @@ def upload():
                 if extension not in allowed_extension:
                     return 'File type is not supported', 415
 
-                elif size > 20480:
+                elif size > 6000000000000000000000000000:
                     return 'File size too large', 400
 
+
+
+                
                 filename = secrets.token_urlsafe(5)
                 file.save(os.path.join(path_to_save+result.username, filename + extension))
                 location = os.path.join(path_to_save+result.username, filename+extension)
@@ -360,6 +363,7 @@ def login():
                 flash("Wrong Password!")
                 return abort(redirect(f"/login"),401)
     return render_template('login/login.html', form=form)
+
 
 @app.route("/delete", methods=['GET', 'POST'])
 @login_required

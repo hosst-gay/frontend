@@ -48,13 +48,21 @@ What you can do to make sure it all worked is by typing in
 ```
 note: You might need to do this for all of the .db files to 
 a: make sure all tables are there
-b: make sure the schema matches the one i the class with db.Model
+b: make sure the schema matches the one that has all columns as the class with db.Model
 
 
 
-if the tables shows "user" then it has worked.
+if the tables shows "user", "embed", "image", "profile" then it has worked.
 
-Thats essentially all.
+
+Then you can run in your cmd
+```sh
+> python3 server.py
+```
+
+and you can visit your localhost:5001 page and it should have worked.
+
+Thats all there is to setting up this service for self-hosting.
 
 
 # License
