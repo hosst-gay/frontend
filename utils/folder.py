@@ -9,6 +9,3 @@ class folder_control:
     def delete(username):
         path = f'/mnt/volume_nyc1_02/imgs/{username}/'
         os.removedirs(name=path)
-
-
-
