@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="hosst.gay | The best free and open source sharex uploader!">
+    <meta property="og:site_name" content="hosst.gay">
+    <meta property="og:image" content="https://cdn.discordapp.com/attachments/911427599203450962/965899596461129778/unknown.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>hosstQ</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost&family=Roboto+Mono:wght@100&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/%22%3E
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost&display=swap" rel="stylesheet">
+    <style>
+                                                                root {
+    --bg-color: #5b606b;
+    --nb-color: #36393f;
+
+    --bg-colour: var(--bg-color);
+    --nb-colour: var(--nb-color);
+}
+
+
+.h1 {
+    color: #af812c
+}
+
+
+.card {
+    margin-top: 20px;
+    border-radius: 0;
+    background-color: var(--nb-colour);
+    height: fit-content !important;
+    display:flex;
+    justify-content: space-evenly;  
+}
+
+.card > .card-title {
+    /* font-family: 'Noto Mono', sans-serif; */
+    margin: 0;
+    font-size: 27px;
+    text-align: left;
+    padding-top: 10px;
+    padding-left: 10px;
+    color: rgb(140, 140, 140);
+}
+
+.card > .card-divider {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: solid 2px var(--bg-color);
+}
+
+.card.small {
+    width: 50%;
+    display:flex;
+    justify-content: space-evenly;  
+    
+}
+
+p {
+    font-family: 'Noah', sans-serif;
+    color: rgb(180, 180, 180);
+    font-size: 5px;
+    text-align: center;
+}
+
+.card > .card-custom-content { 
+    padding-left: 20px;
+    /* font-family: 'Noah', sans-serif; */
+    text-align: left;
+    color: rgb(180, 180, 180);
+    font-size: 20px;
+}
+        nav {
+    margin: 0 auto;
+    margin-top: 16px !important;
+    background-color: var(--nb-colour);
+    width: 400px;
+    max-width: 95%;
+
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+}
+.link {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+
+   float:left;
+   margin-right:5px;
+}
+p {
+    font-family: 'Noah', sans-serif;
+    color: rgb(180, 180, 180);
+    font-size: 16px;
+    text-align: center;
+}
+
+p.link {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+p.link > a > button {
+    color: rgb(180, 180, 180);
+    width: 150px !important;
+    height: 40px !important;
+    background-color: var(--bg-colour) !important;
+    border-radius: 5px;
+    border: 2px solid rgb(133 133 133);
+    text-transform: uppercase;
+    font-size: 16px;
+    font-family: "Jost", sans-serif;
+}
+
+p.link > a > button:hover {
+    color: rgb(140, 140, 140) !important;
+}
+        @media (min-width: 320px) and (max-width: 428px)
+{
+
+.floated {
+   float:left;
+   margin-right:5px;
+}
+
+}
+
+.top-bar {
+    display: flex;
+    height: 5vh;
+    width: 75%;
+    background-color:#36393f;
+    align-content: center;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.topLinks, .topLinks:link, .topLinks:visited, .topLinks:focus, .topLinks:hover, .topLinks:active {
+    color: white;
+    text-shadow: 2px 2px 2px black;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+}
+
+.topLinks {
+    font-size:160%;
+
+}
+
+.topLinks:hover {
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+    color:darkgrey;
+
+}
+
+
+    </style>
+</head>
+<body>
+
+    <center>
+        {% extends "layout.html" %}
+        {% block body %} 
+        
+
+        <div class="top-bar">
+
+            <span class="topText"><a class="topLinks" href="/privacy">Privacy</a></span>
+            <span class="topText"><a class="topLinks" href="/tos">Terms Of Service</a></span>
+            <span class="topText"><a class="topLinks" href="/discord">Discord</a></span>
+        </div>
+        <br>
+
+        <div id="main-content">
+            
+            
+            <h1 style="text-shadow:2px 2px 2px black; color:#af812c"><b>
+                        <img src="https://cdn.discordapp.com/attachments/945813921816793110/967863790513311764/20220424_120504.png" height="300">     
+                        <br>
+                        hosst.gay
+                            <br>
+                            <br>    
+                        The best open source sharex image uploader!
+            
+            
+            </b></h1>
+            <div class="card small">
+                <p class="link" id="update-section" style="display: block;"><a href="/login"><button>Login</button></a></p>
+                <p class="link" id="update-section" style="display: block;"><a href="/register"><button>Register</button></a></p>
+              
+            </div>
+
+
+                
+            </div>
+
+        </div>
+        {% endblock %}
+
+        
+
+    </center>
+
+    
+
+
+
+</body>
+</html>
+
+
