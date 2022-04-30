@@ -1,7 +1,4 @@
-import quart.flask_patch
-import flask
-from uvicorn.middleware.proxy_headers import ProxyHeadersMiddleware
-from quart import Quart, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for, flash
+from flask import Flask, request, json, send_from_directory, render_template, redirect, render_template_string, abort, Response, url_for, flash
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 from os.path import splitext
@@ -13,6 +10,7 @@ from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
 
+
 from utils import size, userid, folder #imports
 from utils.sxcu import sharex
 from utils.uptime import uptime as uptimea
@@ -22,7 +20,7 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
 storage_folder = '/mnt/volume_nyc1_02/imgs'
 path_to_save = '/mnt/volume_nyc1_02/imgs/'
 
-app = Quart(__name__)
+app = Flask(__name__)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config["SECRET_KEY"] = "SawshaIsCute"
@@ -33,7 +31,7 @@ app.config['SQLALCHEMY_BINDS'] = {
     'profile':'sqlite:///schema/profile.db'
 }
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-app.asgi_app = ProxyHeadersMiddleware(app.asgi_app, trusted_hosts=["127.0.0.1"])
+app.wsgi_app = ProxyFix(app.wsgi_app)
 folder_size = size.get_folder_size("/mnt/volume_nyc1_02/imgs")
 port = 5001
 
@@ -52,7 +50,7 @@ def folder_shit2(username):
 
 @app.before_request
 def block_method():
-    ip = request.remote_addr
+    ip = request.environ.get('REMOTE_ADDR')
     if ip in ip_ban_list:
         return abort(Response(render_template("errors/403.html"), 403))
 
@@ -260,7 +258,7 @@ def upload():
             secret = remember
 
 
-        ip = request.remote_addr
+        ip = request.environ.get('REMOTE_ADDR')
         if ip in ip_ban_list:
             return 'Blacklist IP!', 403
         
@@ -418,4 +416,5 @@ def register():
     return render_template('register/register.html', form=form)
 
 
-app.run(port=port, debug=True)
+if __name__ == '__main__':
+    app.run(port=port, debug=True)
