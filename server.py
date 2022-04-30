@@ -29,7 +29,7 @@ app.config['SQLALCHEMY_BINDS'] = {
     'embed':'sqlite:///schema/embed.db',
     'image':'sqlite:///schema/image.db',
     'profile':'sqlite:///schema/profile.db'
-}
+}   
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
 folder_size = size.get_folder_size("/mnt/volume_nyc1_02/imgs")
