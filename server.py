@@ -199,7 +199,11 @@ def gallery():
 @app.route('/users', methods=['GET', 'POST'])
 def user_search():
     users = db.session.query(User.username).all()
-'172.69.70.86', '172.69.70.204', '172.69.70.232', '172.69.68.230'
+
+    result = '<br>'.join(u.username for u in users)
+
+    return render_template('users/user.html', result=result)
+
 
 
 @app.route('/users/<int:id>', methods=['GET', 'POST'])
