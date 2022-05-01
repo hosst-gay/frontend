@@ -241,7 +241,7 @@ def sxcu():
 
 @app.route("/source")
 def source():
-    return redirect(location="https://github.com/hosst-gay/website")
+    return redirect(location="https://github.com/hosst-gay")
 
 
 @app.route('/upload')
