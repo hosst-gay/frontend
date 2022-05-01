@@ -386,7 +386,7 @@ def delete():
     db.session.commit()
     Embed.query.filter_by(username=current_user.username).delete()
     db.session.commit()
-    folder.create_folder.delete(username=current_user.username)
+    folder.folder_control.delete(username=current_user.username)
     return redirect(url_for('home'))
 
 @app.route('/logout', methods=['GET', 'POST'])
