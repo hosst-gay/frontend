@@ -28,7 +28,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///schema/database.db'
 app.config['SQLALCHEMY_BINDS'] = {
     'embed':'sqlite:///schema/embed.db',
     'image':'sqlite:///schema/image.db',
-    'profile':'sqlite:///schema/profile.db'
+    'profile':'sqlite:///schema/profile.db',
+    'invite':'sqlite:///schema/invite.db'
 }   
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -104,6 +105,13 @@ class image(db.Model):
     filename = db.Column(db.String(10), nullable=False)
     location = db.Column(db.String(100), nullable=False)
     secret = db.Column(db.String(50), nullable=False)
+
+class invites(db.Model):
+    __bind_key__ = 'invite'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(80), nullable=False)
+    invite = db.Column(db.String(100), nullable=False)
+    amount = db.Column(db.Integer)
 
 class profile(db.Model):
     __bind_key__ = 'profile'
@@ -242,6 +250,11 @@ def upload_file():
     host = request.root_url
 
     return render_template('upload/upload.html', host=host)
+
+
+
+
+
 
 
 @app.route('/upload', methods=['POST'])
