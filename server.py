@@ -9,7 +9,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import InputRequired, Length, ValidationError
 from flask_bcrypt import Bcrypt
-
+from views import views
 
 from utils import size, userid, folder #imports
 from utils.sxcu import sharex
@@ -20,7 +20,8 @@ os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "true"
 storage_folder = '/mnt/volume_nyc1_02/imgs'
 path_to_save = '/mnt/volume_nyc1_02/imgs/'
 
-app = Flask(__name__)
+app = Flask(__name__)       
+app.register_blueprint(views)
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 app.config["SECRET_KEY"] = "SawshaIsCute"
@@ -29,7 +30,8 @@ app.config['SQLALCHEMY_BINDS'] = {
     'embed':'sqlite:///schema/embed.db',
     'image':'sqlite:///schema/image.db',
     'profile':'sqlite:///schema/profile.db',
-    'invite':'sqlite:///schema/invite.db'
+    'userinvite':'sqlite:///schema/userinvite.db',
+    'invites':'sqlite:///schema/invites.db'
 }   
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.wsgi_app = ProxyFix(app.wsgi_app)
@@ -106,12 +108,18 @@ class image(db.Model):
     location = db.Column(db.String(100), nullable=False)
     secret = db.Column(db.String(50), nullable=False)
 
-class invites(db.Model):
-    __bind_key__ = 'invite'
+class userinvites(db.Model):
+    __bind_key__ = 'userinvite'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False)
     invite = db.Column(db.String(100), nullable=False)
     amount = db.Column(db.Integer)
+
+class invites(db.Model):
+    __bind_key__ = 'invites'
+    id = db.Column(db.Integer, primary_key=True)
+    invites = db.Column(db.String(100), nullable=False)
+
 
 class profile(db.Model):
     __bind_key__ = 'profile'
@@ -124,6 +132,7 @@ class RegisterForm(FlaskForm):
     password = PasswordField(validators=[InputRequired(), Length(
         min=4, max=50)], render_kw={"placeholder": "Password"})
 
+
     submit = SubmitField("Register")
 
 
@@ -134,6 +143,14 @@ class RegisterForm(FlaskForm):
         if existing_user_username:
             raise ValidationError(
                 "That username already exists! please choose another one.")
+
+    def validate_invites(self, invite):
+        invite1 = db.session.query(invites.invites).all()
+
+        if invite1 is not invite.data:
+            raise ValidationError(
+                "Wrong invite!"
+            )
 
 
 class LoginForm(FlaskForm):
@@ -146,9 +163,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
-@app.route("/", methods=["GET"])
-def home():
-    return render_template("home/home.html")
+
 
 @app.route("/privacy")
 def privacy():
@@ -167,8 +182,8 @@ def dash():
     list = folder_shit2(username=current_user.username) 
     number_files = len(list)
     uptime = uptimea()
-
-    return render_template("dashboard/dash.html", uptime=uptime, files=number_files, size=folder_shit(username=current_user.username))
+    ass = len(db.session.query(invites.invites).all())
+    return render_template("dashboard/dash.html", uptime=uptime, files=number_files, size=folder_shit(username=current_user.username), ass=ass)
 
 @app.route('/discord')
 def discord():
@@ -279,7 +294,6 @@ def upload():
         elif request.form.to_dict(flat=False)['secret_key'][0] ==  secret:
 
             '''Get file object from POST request, extract and define needed variables for future use.'''
-
             if result and result.username is not None:
                 file = request.files['image']
                 extension = splitext(file.filename)[1]
@@ -290,7 +304,8 @@ def upload():
                     return 'File type is not supported', 415
 
                 elif size > 6000000000000000000000000000:
-                    return 'File size too large', 400
+                    flash("File size too large!")
+                    return abort(redirect('/upload'), 400)
 
 
 
@@ -413,19 +428,17 @@ def register():
         if user:
             raise ValidationError("This username already exists!")
         else:
+                    new_user = User(username=form.username.data,
+                    password=hashed_password, user_id=str(user_id))
+                    db.session.add(new_user)
+                    embed_shit = Embed(username=form.username.data, color="#b15141", title="false")
+        
+                    db.session.commit()
+                    db.session.add(embed_shit)
+                    db.session.commit()
+                    folder.folder_control.create(username=form.username.data)
 
-            new_user = User(username=form.username.data,
-                            password=hashed_password, user_id=str(user_id))
-            db.session.add(new_user)
-
-            embed_shit = Embed(username=form.username.data, color="#b15141", title="false")
-            db.session.add(embed_shit)
-            db.session.commit()
-            db.session.commit()
-            folder.folder_control.create(username=form.username.data)
-
-            return redirect(url_for('login'))
-
+                    return redirect(url_for('login'))
     return render_template('register/register.html', form=form)
 
 
