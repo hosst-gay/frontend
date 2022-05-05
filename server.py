@@ -305,7 +305,7 @@ def upload():
                 if extension not in allowed_extension:
                     return 'File type is not supported', 415
 
-                elif size > 6000000000000000000000000000:
+                elif size > 600000:
                     flash("File size too large!")
                     return abort(redirect('/upload'), 400)
 
