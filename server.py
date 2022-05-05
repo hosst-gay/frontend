@@ -162,7 +162,9 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField("Login")
 
-
+@app.route('/')
+def home():
+    return render_template("home/home.html")
 
 
 @app.route("/privacy")
