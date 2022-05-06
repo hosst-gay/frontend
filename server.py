@@ -279,7 +279,7 @@ def upload():
     if request.method == 'POST':
         pernis = request.form.to_dict(flat=False)['secret_key'][0]
         result = User.query.filter_by(user_id=pernis).first()
-        print(pernis)
+        
         remember=request.form.get('secret_key')      
 
         if result is not None:
@@ -292,8 +292,16 @@ def upload():
         if ip in ip_ban_list:
             return 'Blacklist IP!', 403
         
+        
     
         elif request.form.to_dict(flat=False)['secret_key'][0] ==  secret:
+            print(f"ip: {ip}\n Secret: {pernis}")
+            currentlyUploading = []
+            if ip in currentlyUploading:
+                print("already Uploading!")
+                return 'Already uploading!', 405
+            else:
+                currentlyUploading.append(ip)
 
             '''Get file object from POST request, extract and define needed variables for future use.'''
             if result and result.username is not None:
@@ -305,17 +313,17 @@ def upload():
                 if extension not in allowed_extension:
                     return 'File type is not supported', 415
 
-                elif size > 6000000000000000000000000000:
+                elif size > 5368709120.0:
                     flash("File size too large!")
                     return abort(redirect('/upload'), 400)
 
-
-
                 
+
+                print(currentlyUploading)
                 filename = secrets.token_urlsafe(5)
                 file.save(os.path.join(path_to_save+result.username, filename + extension))
                 location = os.path.join(path_to_save+result.username, filename+extension)
-        
+                currentlyUploading.pop(currentlyUploading.index(ip))
                 try:
                     file_info = image(username=result.username,filename=filename+extension, location=location, secret=result.user_id)
         
