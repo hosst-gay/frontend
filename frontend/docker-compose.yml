@@ -1,0 +1,25 @@
+
+services:
+  api:
+    build: /root/hosst/backend
+    command: uvicorn app:app --host 0.0.0.0 --port 5002
+    ports:
+      - 5002:5002
+
+    depends_on:
+      - db
+
+
+
+  db:
+    image: postgres:13
+    restart: always
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    
+    environment:
+      POSTGRES_DB: "uploader"
+      POSTGRES_USER: "skye"
+
+    ports:
+      - 5432:5432
