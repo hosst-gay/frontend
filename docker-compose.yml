@@ -1,7 +1,7 @@
 
 services:
-  api:
-    build: /root/hosst/backend
+  backend:
+    build: /root/hosst/backend/
     command: uvicorn app:app --host 0.0.0.0 --port 5002
     ports:
       - 5002:5002
@@ -9,7 +9,13 @@ services:
     depends_on:
       - db
 
+  frontend:
+    build: ./frontend/
+    command: uvicorn app:app --host 0.0.0.0 --port 5003
 
+    depends_on:
+      - db
+      - backend
 
   db:
     image: postgres:13
@@ -18,8 +24,9 @@ services:
       - ./postgres:/var/lib/postgresql/data
     
     environment:
-      POSTGRES_DB: "uploader"
+      POSTGRES_DB: "hoss"
       POSTGRES_USER: "skye"
+      POSTGRES_HOST_AUTH_METHOD: trust
 
     ports:
-      - 5432:5432
+      - 5455:5455

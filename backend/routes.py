@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
-from starlette.responses import JSONResponse
+from starlette.responses import JSONResponse, Response
 from starlette.requests import Request
 
 if TYPE_CHECKING:
@@ -9,3 +9,8 @@ if TYPE_CHECKING:
 
 async def upload_files(request: Request) -> JSONResponse:
     pass
+
+async def testing(request: Request) -> Response:
+    return Response(request.path_params, 200)
+
+
