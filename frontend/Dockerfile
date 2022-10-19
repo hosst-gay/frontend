@@ -1,8 +1,8 @@
-FROM python:3.10-alpine
+FROM node:lts
+# copy both 'package.json' and 'package-lock.json' (if available)
+COPY package*.json ./
 
-COPY requirements.txt requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt 
-
-EXPOSE 5003
+# install project dependencies
+RUN npm install
 
 COPY . .

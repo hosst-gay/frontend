@@ -16,21 +16,16 @@ with open("./configs/config.toml", "rb") as fp:
 
 
 class App(Starlette):
-    def __init__(self, *, debug: bool ,routes: Route):
+    def __init__(self, *, debug: bool, routes: Route):
         super().__init__(debug=debug,routes=routes)
-
-        
-    @property
-    def config(self) -> Config:
-        return CONFIG
+        self.config: Config = CONFIG
 
     
 app = App(debug=True, routes=routes)
 
 @app.on_event("startup")
 async def startup():
-    pass
-
+    app.db: asyncpg.Pool = None
 
 
 

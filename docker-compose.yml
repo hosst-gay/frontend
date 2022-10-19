@@ -1,7 +1,7 @@
 
 services:
   backend:
-    build: /root/hosst/backend/
+    build: ./backend/
     command: uvicorn app:app --host 0.0.0.0 --port 5002
     ports:
       - 5002:5002
@@ -11,22 +11,24 @@ services:
 
   frontend:
     build: ./frontend/
-    command: uvicorn app:app --host 0.0.0.0 --port 5003
+    command: "npm run dev"
 
     depends_on:
       - db
       - backend
 
   db:
+    container_name: "hosst_db"
+    restart: unless-stopped
     image: postgres:13
-    restart: always
     volumes:
-      - ./postgres:/var/lib/postgresql/data
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     
     environment:
-      POSTGRES_DB: "hoss"
-      POSTGRES_USER: "skye"
-      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: "${POSTGRES_DB}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
 
     ports:
       - 5455:5455
+
+    command: -p 5455
